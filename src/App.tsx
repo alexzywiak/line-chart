@@ -1,11 +1,11 @@
 import React from "react";
 import "./App.css";
-import LineChart from "./LineChart/LineChart";
+import Chart from "./ChartJs/Chart";
 
 function App() {
   return (
     <div className="App">
-      <LineChart />
+      <Chart />
     </div>
   );
 }
