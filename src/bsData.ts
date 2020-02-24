@@ -58,5 +58,20 @@ export default {
       timestamp: "1582131835",
       value: "0.014500000000000006"
     }
+  ],
+  config_events: [
+    {
+      timestamp: "1582130635"
+    },
+    {
+      timestamp: "1582130935"
+    },
+    {
+      timestamp: "1582131235"
+    },
+
+    {
+      timestamp: "1582131835"
+    }
   ]
 };

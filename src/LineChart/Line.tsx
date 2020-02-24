@@ -18,8 +18,8 @@ const Line = ({ xScale, yScale, data, color }: LineProps) => {
     }) // set the x values for the line generator
     .y(function(d) {
       return yScale(Number(d.value));
-    }) // set the y values for the line generator
-    .curve(d3.curveMonotoneX);
+    }); // set the y values for the line generator
+  // .curve(d3.curveMonotoneX);
 
   useEffect(() => {
     if (pathRef.current) {

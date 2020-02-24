@@ -5,6 +5,7 @@ import Line from "./Line";
 import XAxis from "./XAxis";
 import { Bounds, Margin } from "./ResizeSVG";
 import YAxis from "./YAxis";
+import Points from "./Points";
 interface LineChartProps {
   bounds: Bounds;
   margin: Margin;
@@ -72,11 +73,17 @@ const LineChart = ({ bounds: { height, width } }: LineChartProps) => {
     scale: yScale,
     height
   };
+  const pointsProps = {
+    xScale,
+    yScale,
+    data: data.config_events
+  };
 
   return (
     <g>
       <Line {...healthLineProps} />
       <Line {...latencyLineProps} />
+      <Points {...pointsProps} />
       <XAxis {...xAxisProps} />
       <YAxis {...yAxisProps} />
     </g>
