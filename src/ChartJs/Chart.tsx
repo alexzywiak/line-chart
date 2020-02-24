@@ -68,12 +68,10 @@ export default () => {
                 const targetId = (elements[0] as any)._yScale.id;
                 console.log(activeAxis!.id, targetId);
                 if (!activeAxis || activeAxis.id !== targetId) {
-                  console.log(this.options.scales);
                   this.options.scales!.yAxes = yAxes.map(axis => {
                     const display = axis.id === targetId ? true : false;
                     return { ...axis, display };
                   });
-                  console.log(this.options.scales);
                   this.update({ duration: 500, easing: "linear" });
                 }
               }
