@@ -7,7 +7,12 @@ interface YAxisProps<D> {
 }
 const YAxis = <D extends any>({ scale }: YAxisProps<D>) => {
   const axis = axisLeft(scale);
-  return <AxisCmp axis={axis} />;
+
+  return (
+    <>
+      <AxisCmp axis={axis} />
+    </>
+  );
 };
 
 YAxis.displayName = "YAxis";

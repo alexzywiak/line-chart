@@ -6,6 +6,8 @@ import XAxis from "./XAxis";
 import { Bounds, Margin } from "./ResizeSVG";
 import YAxis from "./YAxis";
 import Points from "./Points";
+import YGridLines from "./YGridLines";
+
 interface LineChartProps {
   bounds: Bounds;
   margin: Margin;
@@ -78,14 +80,19 @@ const LineChart = ({ bounds: { height, width } }: LineChartProps) => {
     yScale,
     data: data.config_events
   };
+  const gridProps = {
+    scale: yScale,
+    width
+  };
 
   return (
     <g>
+      <YGridLines {...gridProps} />
+      <XAxis {...xAxisProps} />
+      <YAxis {...yAxisProps} />
       <Line {...healthLineProps} />
       <Line {...latencyLineProps} />
       <Points {...pointsProps} />
-      <XAxis {...xAxisProps} />
-      <YAxis {...yAxisProps} />
     </g>
   );
 };
