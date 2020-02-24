@@ -1,14 +1,17 @@
-import React, { useRef, useEffect } from "react";
+import React from "react";
 import * as d3 from "d3";
 import data from "../bsData";
-interface LineChartProps {}
+import Line from "./Line";
+import XAxis from "./XAxis";
+import { Bounds, Margin } from "./ResizeSVG";
+import YAxis from "./YAxis";
+interface LineChartProps {
+  bounds: Bounds;
+  margin: Margin;
+}
 
-const margin = { top: 50, right: 50, bottom: 50, left: 50 };
-const width = 1000 - margin.left - margin.right; // Use the window's width
-const height = 1000 - margin.top - margin.bottom;
-
-const LineChart = (props: LineChartProps) => {
-  const pathRef = useRef<SVGPathElement>(null);
+const LineChart = ({ bounds: { height, width } }: LineChartProps) => {
+  // Assume time stamps are the same
   const xScale = d3
     .scaleLinear()
     .domain([
@@ -17,35 +20,66 @@ const LineChart = (props: LineChartProps) => {
     ]) // input
     .range([0, width]);
 
+  // Metric One
+  var percentageYScale = d3
+    .scaleLinear()
+    .domain([0, 1]) // input
+    .range([height, 0]);
+
+  // Metric Two
+  var latencyYScale = d3
+    .scaleLinear()
+    .domain([
+      Number(
+        d3.min(data.p50_request_duration_seconds.map(({ value }) => value))
+      ),
+      Number(
+        d3.max(data.p50_request_duration_seconds.map(({ value }) => value))
+      )
+    ]) // input
+    .range([height, 0]);
+
+  // Metric One
   var yScale = d3
     .scaleLinear()
     .domain([0, 1]) // input
     .range([height, 0]);
 
-  const line = d3
-    .line<{ timestamp: string; value: string }>()
-    .x(function(d) {
-      return xScale(Number(d.timestamp));
-    }) // set the x values for the line generator
-    .y(function(d) {
-      return yScale(Number(d.value));
-    }) // set the y values for the line generator
-    .curve(d3.curveMonotoneX);
+  const healthLineProps = {
+    color: "blue",
+    xScale,
+    yScale: percentageYScale,
+    data: data.health_score.map(({ timestamp, value }) => ({
+      value,
+      timestamp
+    }))
+  };
+  const latencyLineProps = {
+    color: "red",
+    xScale,
+    yScale: latencyYScale,
+    data: data.p50_request_duration_seconds.map(({ timestamp, value }) => ({
+      value,
+      timestamp
+    }))
+  };
 
-  useEffect(() => {
-    if (pathRef.current) {
-      d3.select(pathRef.current)
-        .datum(data.health_score)
-        .attr("d", line);
-    }
-  }, [line]);
+  const xAxisProps = {
+    scale: xScale,
+    height
+  };
+  const yAxisProps = {
+    scale: yScale,
+    height
+  };
 
   return (
-    <svg height={1000} width={1000}>
-      <g>
-        <path stroke="blue" strokeWidth="3" fill="none" ref={pathRef}></path>
-      </g>
-    </svg>
+    <g>
+      <Line {...healthLineProps} />
+      <Line {...latencyLineProps} />
+      <XAxis {...xAxisProps} />
+      <YAxis {...yAxisProps} />
+    </g>
   );
 };
 

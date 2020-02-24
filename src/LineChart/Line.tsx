@@ -1,14 +1,14 @@
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 
-type DataType = { timestamp: string; value: string };
-
 interface LineProps {
   xScale: d3.ScaleLinear<number, number>;
   yScale: d3.ScaleLinear<number, number>;
   data: { timestamp: string; value: string }[];
+  color: string;
 }
-const Line = ({ xScale, yScale, data }: LineProps) => {
+
+const Line = ({ xScale, yScale, data, color }: LineProps) => {
   const pathRef = useRef<SVGPathElement>(null);
 
   const line = d3
@@ -28,7 +28,8 @@ const Line = ({ xScale, yScale, data }: LineProps) => {
         .attr("d", line);
     }
   }, [data, line]);
-  return <path ref={useRef}></path>;
+
+  return <path stroke={color} strokeWidth="3" fill="none" ref={pathRef}></path>;
 };
 
 Line.displayName = "Line";

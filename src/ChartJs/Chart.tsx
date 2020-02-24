@@ -75,7 +75,6 @@ export default () => {
             },
             legend: {
               onClick: function(e, item) {
-                const t = this;
                 (this as any).chart.data.datasets = (this as any).chart.data.datasets.map(
                   (dataSet: ChartDataSets, idx: number) => {
                     if (idx === item.datasetIndex) {
