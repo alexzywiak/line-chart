@@ -7,6 +7,7 @@ import { Bounds, Margin } from "./ResizeSVG";
 import YAxis from "./YAxis";
 import Points from "./Points";
 import YGridLines from "./YGridLines";
+import Threshold from "./Threshold";
 
 interface LineChartProps {
   bounds: Bounds;
@@ -84,12 +85,18 @@ const LineChart = ({ bounds: { height, width } }: LineChartProps) => {
     scale: yScale,
     width
   };
+  const ThresholdProps = {
+    xScale,
+    yScale: percentageYScale
+  };
 
   return (
     <g>
       <YGridLines {...gridProps} />
       <XAxis {...xAxisProps} />
       <YAxis {...yAxisProps} />
+      <Threshold {...ThresholdProps} value={0.75} />
+      <Threshold {...ThresholdProps} value={0.25} />
       <Line {...healthLineProps} />
       <Line {...latencyLineProps} />
       <Points {...pointsProps} />
