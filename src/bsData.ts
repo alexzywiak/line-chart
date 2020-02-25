@@ -1,77 +1,36 @@
-export default {
-  health_score: [
-    {
-      timestamp: "1582130035",
-      value: "0.97"
-    },
-    {
-      timestamp: "1582130335",
-      value: "0.65"
-    },
-    {
-      timestamp: "1582130635",
-      value: "0.70"
-    },
-    {
-      timestamp: "1582130935",
-      value: "0.79"
-    },
-    {
-      timestamp: "1582131235",
-      value: "0.68"
-    },
-    {
-      timestamp: "1582131535",
-      value: "0.9709907174110413"
-    },
-    {
-      timestamp: "1582131835",
-      value: "0.9709091186523438"
-    }
-  ],
-  p50_request_duration_seconds: [
-    {
-      timestamp: "1582130035",
-      value: "0.014700729927007303"
-    },
-    {
-      timestamp: "1582130335",
-      value: "0.01457142857142857"
-    },
-    {
-      timestamp: "1582130635",
-      value: "0.014431506849315075"
-    },
-    {
-      timestamp: "1582130935",
-      value: "0.014638888888888896"
-    },
-    {
-      timestamp: "1582131235",
-      value: "0.014644927536231896"
-    },
-    {
-      timestamp: "1582131535",
-      value: "0.014571428571428575"
-    },
-    {
-      timestamp: "1582131835",
-      value: "0.014500000000000006"
-    }
-  ],
-  config_events: [
-    {
-      timestamp: "1582130635"
-    },
-    {
-      timestamp: "1582130935"
-    },
-    {
-      timestamp: "1582131235"
-    },
+import moment from "moment";
 
-    {
-      timestamp: "1582131835"
-    }
-  ]
+const rand = (min: number, max: number) => Math.random() * (max - min) + min;
+
+const toTimestamp = (n: number) =>
+  moment()
+    .subtract(n * 5, "minutes")
+    .unix()
+    .toString();
+
+export default (n: number) => {
+  const list = Array(n).fill(null);
+
+  return {
+    health_score: list.map((_, idx) => ({
+      timestamp: toTimestamp(n - idx),
+      value: String(Math.random())
+    })),
+    p50_request_duration_seconds: list.map((_, idx) => ({
+      timestamp: toTimestamp(n - idx),
+      value: String(rand(0.01, 1))
+    })),
+    config_events: list
+      .map((_, idx) => ({
+        timestamp: toTimestamp(n - idx)
+      }))
+      .filter(() => (Math.random() > 0.85 ? true : false)),
+    bands: Array(Math.floor(n / 8))
+      .fill(null)
+      .map((_, idx) => {
+        const end = Math.floor(rand((idx + 1) * 6, (idx + 1) * 7));
+        const start = Math.floor(rand(end + 1, (idx + 1) * 8));
+        return { start: toTimestamp(start), end: toTimestamp(end) };
+      })
+  };
 };

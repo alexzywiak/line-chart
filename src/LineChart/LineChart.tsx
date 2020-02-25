@@ -1,6 +1,6 @@
 import React from "react";
 import * as d3 from "d3";
-import data from "../bsData";
+import genBs from "../bsData";
 import Line from "./Line";
 import XAxis from "./XAxis";
 import { Bounds, Margin } from "./ResizeSVG";
@@ -8,11 +8,14 @@ import YAxis from "./YAxis";
 import Points from "./Points";
 import YGridLines from "./YGridLines";
 import Threshold from "./Threshold";
+import Band from "./Band";
 
 interface LineChartProps {
   bounds: Bounds;
   margin: Margin;
 }
+
+const data = genBs(25);
 
 const LineChart = ({ bounds: { height, width } }: LineChartProps) => {
   // Assume time stamps are the same
@@ -43,12 +46,6 @@ const LineChart = ({ bounds: { height, width } }: LineChartProps) => {
     ]) // input
     .range([height, 0]);
 
-  // Metric One
-  var yScale = d3
-    .scaleLinear()
-    .domain([0, 1]) // input
-    .range([height, 0]);
-
   const healthLineProps = {
     color: "blue",
     xScale,
@@ -58,14 +55,12 @@ const LineChart = ({ bounds: { height, width } }: LineChartProps) => {
       timestamp
     }))
   };
+
   const latencyLineProps = {
     color: "red",
     xScale,
     yScale: latencyYScale,
-    data: data.p50_request_duration_seconds.map(({ timestamp, value }) => ({
-      value,
-      timestamp
-    }))
+    data: data.p50_request_duration_seconds
   };
 
   const xAxisProps = {
@@ -73,19 +68,26 @@ const LineChart = ({ bounds: { height, width } }: LineChartProps) => {
     height
   };
   const yAxisProps = {
-    scale: yScale,
+    scale: percentageYScale,
     height
   };
   const pointsProps = {
     xScale,
-    yScale,
-    data: data.config_events
+    yScale: percentageYScale,
+    data: data.config_events,
+    onClick: ({ timestamp }: { timestamp: string }) => {
+      console.log(timestamp);
+    }
   };
   const gridProps = {
-    scale: yScale,
+    scale: percentageYScale,
     width
   };
-  const ThresholdProps = {
+  const thresholdProps = {
+    xScale,
+    yScale: percentageYScale
+  };
+  const bandProps = {
     xScale,
     yScale: percentageYScale
   };
@@ -95,8 +97,23 @@ const LineChart = ({ bounds: { height, width } }: LineChartProps) => {
       <YGridLines {...gridProps} />
       <XAxis {...xAxisProps} />
       <YAxis {...yAxisProps} />
-      <Threshold {...ThresholdProps} value={0.75} />
-      <Threshold {...ThresholdProps} value={0.25} />
+      <Band
+        {...bandProps}
+        start={Number(data.health_score[2].timestamp)}
+        end={Number(data.health_score[4].timestamp)}
+      />
+      <Band
+        {...bandProps}
+        start={Number(data.health_score[12].timestamp)}
+        end={Number(data.health_score[16].timestamp)}
+      />
+      <Band
+        {...bandProps}
+        start={Number(data.health_score[20].timestamp)}
+        end={Number(data.health_score[23].timestamp)}
+      />
+      <Threshold {...thresholdProps} value={0.75} />
+      <Threshold {...thresholdProps} value={0.25} />
       <Line {...healthLineProps} />
       <Line {...latencyLineProps} />
       <Points {...pointsProps} />
