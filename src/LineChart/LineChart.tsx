@@ -8,6 +8,7 @@ import YAxis from "./YAxis";
 import Points from "./Points";
 import YGridLines from "./YGridLines";
 import Threshold from "./Threshold";
+import Area from "./Area";
 import Band from "./Band";
 
 interface LineChartProps {
@@ -115,6 +116,7 @@ const LineChart = ({ bounds: { height, width } }: LineChartProps) => {
       <Threshold {...thresholdProps} value={0.75} />
       <Threshold {...thresholdProps} value={0.25} />
       <Line {...healthLineProps} />
+      <Area {...healthLineProps} />
       <Line {...latencyLineProps} />
       <Points {...pointsProps} />
     </g>
