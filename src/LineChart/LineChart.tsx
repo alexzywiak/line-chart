@@ -9,7 +9,7 @@ import Points from "./Points";
 import YGridLines from "./YGridLines";
 import Threshold from "./Threshold";
 import Area from "./Area";
-import Band from "./Band";
+import Bands from "./Bands";
 
 interface LineChartProps {
   bounds: Bounds;
@@ -88,37 +88,30 @@ const LineChart = ({ bounds: { height, width } }: LineChartProps) => {
     xScale,
     yScale: percentageYScale
   };
-  const bandProps = {
-    xScale,
-    yScale: percentageYScale
-  };
 
+  const bandProps = {
+    bands: data.bands,
+    xScale,
+    height
+  };
+  const toolTipProps = {
+    bounds: { height, width },
+    xScale,
+    data: [data.health_score, data.p50_request_duration_seconds]
+  };
   return (
     <g>
       <YGridLines {...gridProps} />
       <XAxis {...xAxisProps} />
       <YAxis {...yAxisProps} />
-      <Band
-        {...bandProps}
-        start={Number(data.health_score[2].timestamp)}
-        end={Number(data.health_score[4].timestamp)}
-      />
-      <Band
-        {...bandProps}
-        start={Number(data.health_score[12].timestamp)}
-        end={Number(data.health_score[16].timestamp)}
-      />
-      <Band
-        {...bandProps}
-        start={Number(data.health_score[20].timestamp)}
-        end={Number(data.health_score[23].timestamp)}
-      />
+      <Bands {...bandProps} />
       <Threshold {...thresholdProps} value={0.75} />
       <Threshold {...thresholdProps} value={0.25} />
       <Line {...healthLineProps} />
       <Area {...healthLineProps} />
       <Line {...latencyLineProps} />
       <Points {...pointsProps} />
+      {/* <ToolTip {...toolTipProps} /> */}
     </g>
   );
 };

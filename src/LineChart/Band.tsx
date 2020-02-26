@@ -2,15 +2,14 @@ import React from "react";
 import { AxisScale } from "d3";
 
 interface BandProps {
-  yScale: AxisScale<number>;
+  height: number;
   xScale: AxisScale<number>;
-  start: number;
-  end: number;
+  start: string;
+  end: string;
 }
-const Band = ({ start, end, xScale, yScale }: BandProps) => {
-  const [height] = yScale.range();
-  const startPt = xScale(start) || 0;
-  const endPt = xScale(end) || 0;
+const Band = ({ start, end, xScale, height }: BandProps) => {
+  const startPt = xScale(Number(start)) || 0;
+  const endPt = xScale(Number(end)) || 0;
   const bandProps = {
     fill: "pink",
     opacity: 0.5,
