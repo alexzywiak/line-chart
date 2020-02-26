@@ -18,7 +18,14 @@ const AxisCmp = <D extends any>({
     }
   });
 
-  return <g ref={gRef} transform={`translate(${width},${height})`} />;
+  return (
+    <g
+      ref={gRef}
+      color="#dde3ed"
+      style={{ fontSize: "14px" }}
+      transform={`translate(${width},${height})`}
+    />
+  );
 };
 
 AxisCmp.displayName = "AxisCmp";

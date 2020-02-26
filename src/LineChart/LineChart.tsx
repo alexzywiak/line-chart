@@ -48,7 +48,7 @@ const LineChart = ({ bounds: { height, width } }: LineChartProps) => {
     .range([height, 0]);
 
   const healthLineProps = {
-    color: "blue",
+    color: "#FF00FF",
     xScale,
     yScale: percentageYScale,
     data: data.health_score.map(({ timestamp, value }) => ({
@@ -58,7 +58,7 @@ const LineChart = ({ bounds: { height, width } }: LineChartProps) => {
   };
 
   const latencyLineProps = {
-    color: "red",
+    color: "#5D7FED",
     xScale,
     yScale: latencyYScale,
     data: data.p50_request_duration_seconds
@@ -102,15 +102,15 @@ const LineChart = ({ bounds: { height, width } }: LineChartProps) => {
   return (
     <g>
       <YGridLines {...gridProps} />
-      <XAxis {...xAxisProps} />
-      <YAxis {...yAxisProps} />
-      <Bands {...bandProps} />
-      <Threshold {...thresholdProps} value={0.75} />
-      <Threshold {...thresholdProps} value={0.25} />
+      {/* <Bands {...bandProps} /> */}
       <Line {...healthLineProps} />
       <Area {...healthLineProps} />
       <Line {...latencyLineProps} />
+      <Threshold {...thresholdProps} value={0.75} />
+      <Threshold {...thresholdProps} value={0.25} />
       <Points {...pointsProps} />
+      <XAxis {...xAxisProps} />
+      <YAxis {...yAxisProps} />
       {/* <ToolTip {...toolTipProps} /> */}
     </g>
   );

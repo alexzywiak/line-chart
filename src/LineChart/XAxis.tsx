@@ -7,7 +7,7 @@ interface XAxisProps<D> {
   scale: AxisScale<D>;
 }
 
-const timeFormatter = timeFormat("%I:%M");
+const timeFormatter = timeFormat("%I:%M %p");
 
 const XAxis = <D extends number>({ height, scale }: XAxisProps<D>) => {
   const axis = axisBottom(scale).tickFormat(t => {

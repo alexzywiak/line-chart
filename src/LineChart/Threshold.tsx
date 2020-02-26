@@ -18,9 +18,9 @@ const Threshold = ({ value, yScale, xScale }: ThresholdProps) => {
   return (
     <line
       {...lineProps}
-      stroke="grey"
+      stroke="#8e99ab"
       strokeWidth="3"
-      strokeDasharray="16"
+      strokeDasharray="5"
     ></line>
   );
 };

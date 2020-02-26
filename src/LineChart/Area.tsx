@@ -5,8 +5,9 @@ interface AreaProps {
   xScale: d3.AxisScale<any>;
   yScale: d3.AxisScale<any>;
   data: { timestamp: string; value: string }[];
+  color: string;
 }
-const Area = ({ xScale, yScale, data }: AreaProps) => {
+const Area = ({ xScale, yScale, data, color }: AreaProps) => {
   const pathRef = useRef<SVGPathElement>(null);
   const [height] = yScale.range();
 
@@ -32,11 +33,11 @@ const Area = ({ xScale, yScale, data }: AreaProps) => {
     <>
       <defs>
         <linearGradient id="sampleGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="blue" />
-          <stop offset="80%" stopColor="transparent" />
+          <stop offset="0%" stopColor={color} />
+          <stop offset="100%" stopColor="rgba(0,0,0,0)" />
         </linearGradient>
       </defs>
-      <path fill="url(#sampleGradient)" opacity={0.3} ref={pathRef}></path>
+      <path fill="url(#sampleGradient)" opacity={0.9} ref={pathRef}></path>
     </>
   );
 };

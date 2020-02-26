@@ -1,3 +1,7 @@
+body {
+  background-image: -webkit-linear-gradient(225deg, #333840 0%, #021922 66%);
+  height: 100vh;
+}
 .App {
   text-align: center;
 }

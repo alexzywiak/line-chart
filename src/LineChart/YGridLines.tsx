@@ -18,7 +18,7 @@ const YGridLines = <D extends any>({ scale, width }: YGridLineProps<D>) => {
     }
   });
 
-  return <g ref={gRef} color="lightgrey" strokeOpacity={0.7} />;
+  return <g ref={gRef} color="#dde3ed" strokeOpacity={0.7} />;
 };
 
 YGridLines.displayName = "YGridLines";

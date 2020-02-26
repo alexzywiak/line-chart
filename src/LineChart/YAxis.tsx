@@ -6,7 +6,7 @@ interface YAxisProps<D> {
   scale: AxisScale<D>;
 }
 const YAxis = <D extends any>({ scale }: YAxisProps<D>) => {
-  const axis = axisLeft(scale).tickFormat(d => `${d * 100}%`);
+  const axis = axisLeft(scale).tickFormat(d => `${d * 100}`);
 
   return (
     <>

@@ -28,7 +28,7 @@ const Points = ({ onHover, onClick, data, xScale, yScale }: PointsProps) => {
             <polygon
               points={`0,0 ${TRIANGLE_SIZE},0 ${TRIANGLE_SIZE /
                 2},${TRIANGLE_SIZE * HEIGHT_RATIO}`}
-              style={{ fill: "green" }}
+              style={{ fill: "#FF00FF" }}
             />
           </svg>
         );
