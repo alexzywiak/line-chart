@@ -1,21 +1,37 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import { Bounds } from "./ResizeSVG";
-import { AxisScale } from "d3";
+import { AxisScale, active } from "d3";
 
-interface DotProps {
-  color: string;
-  translate: string;
-}
+type DotProps = {
+  metric: Metric;
+  activeTimeStamp: number;
+  xScale: AxisScale<number>;
+};
 
-const Dot = ({ color, translate }: DotProps) => {
+const translateStr = (x: number, y: number) => `translate(${x},${y})`;
+
+const Dot = ({
+  metric: { color, data, yScale },
+  activeTimeStamp,
+  xScale
+}: DotProps) => {
   const dotRef = useRef(null);
 
   useEffect(() => {
     if (dotRef.current) {
-      d3.select(dotRef.current).attr("transform", translate);
+      const dataPoint = data.find(
+        ({ timestamp }) => Number(timestamp) === activeTimeStamp
+      );
+      if (dataPoint) {
+        const translate = translateStr(
+          xScale(activeTimeStamp) || 0,
+          yScale(Number(dataPoint.value)) || 0
+        );
+        d3.select(dotRef.current).attr("transform", translate);
+      }
     }
-  }, [translate]);
+  }, [activeTimeStamp]);
 
   return (
     <circle
@@ -54,7 +70,7 @@ const ToolTip = <M extends { [key: string]: Metric }>({
   primaryMetric
 }: ToolTipProps<M>) => {
   const [showToolTip, setShowToolTip] = useState(false);
-  const [translate, setTranslate] = useState<string[]>([]);
+  const [xValue, setXValue] = useState<number>(0);
   const overlayRef = useRef<SVGRectElement>(null);
   const toolTipRef = useRef<SVGForeignObjectElement>(null);
   useEffect(() => {
@@ -75,18 +91,7 @@ const ToolTip = <M extends { [key: string]: Metric }>({
             "transform",
             `translate(${xScale(closestTimestamp)},150)`
           );
-          const dotTranslations = Object.keys(metrics).map(key => {
-            const { yScale, data } = metrics[key];
-            const dataPoint = data.find(
-              ({ timestamp }) => Number(timestamp) === closestTimestamp
-            );
-            return dataPoint
-              ? `translate(${xScale(closestTimestamp)},${yScale(
-                  Number(dataPoint.value)
-                )})`
-              : "";
-          });
-          setTranslate(dotTranslations);
+          setXValue(closestTimestamp);
         });
     }
   }, []);
@@ -108,9 +113,15 @@ const ToolTip = <M extends { [key: string]: Metric }>({
           cheese
         </div>
       </foreignObject>
-      {translate.map((translate, idx) => (
-        <Dot key={colors[idx]} color={colors[idx]} translate={translate} />
-      ))}
+      {Object.keys(metrics).map(key => {
+        const metric = metrics[key];
+        const dotProps = {
+          metric,
+          xScale,
+          activeTimeStamp: xValue
+        };
+        return <Dot key={key} {...dotProps} />;
+      })}
       <rect ref={overlayRef} {...overlayProps}></rect>
     </>
   );
