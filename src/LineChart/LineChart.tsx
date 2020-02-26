@@ -9,13 +9,14 @@ import Points from "./Points";
 import YGridLines from "./YGridLines";
 import Threshold from "./Threshold";
 import Area from "./Area";
-import Bands from "./Bands";
+import ToolTip from "./ToolTip";
 
 interface LineChartProps {
   bounds: Bounds;
   margin: Margin;
 }
 
+const colors = ["#FF00FF", "#5D7FED"];
 const data = genBs(25);
 
 const LineChart = ({ bounds: { height, width } }: LineChartProps) => {
@@ -48,7 +49,7 @@ const LineChart = ({ bounds: { height, width } }: LineChartProps) => {
     .range([height, 0]);
 
   const healthLineProps = {
-    color: "#FF00FF",
+    color: colors[0],
     xScale,
     yScale: percentageYScale,
     data: data.health_score.map(({ timestamp, value }) => ({
@@ -58,7 +59,7 @@ const LineChart = ({ bounds: { height, width } }: LineChartProps) => {
   };
 
   const latencyLineProps = {
-    color: "#5D7FED",
+    color: colors[1],
     xScale,
     yScale: latencyYScale,
     data: data.p50_request_duration_seconds
@@ -95,9 +96,22 @@ const LineChart = ({ bounds: { height, width } }: LineChartProps) => {
     height
   };
   const toolTipProps = {
+    primaryMetric: "health_score" as "health_score",
     bounds: { height, width },
     xScale,
-    data: [data.health_score, data.p50_request_duration_seconds]
+    colors,
+    metrics: {
+      health_score: {
+        color: colors[0],
+        yScale: percentageYScale,
+        data: data.health_score
+      },
+      p50_request_duration_seconds: {
+        color: colors[1],
+        yScale: latencyYScale,
+        data: data.p50_request_duration_seconds
+      }
+    }
   };
   return (
     <g>
@@ -111,7 +125,7 @@ const LineChart = ({ bounds: { height, width } }: LineChartProps) => {
       <Points {...pointsProps} />
       <XAxis {...xAxisProps} />
       <YAxis {...yAxisProps} />
-      {/* <ToolTip {...toolTipProps} /> */}
+      <ToolTip {...toolTipProps} />
     </g>
   );
 };
