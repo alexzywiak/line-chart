@@ -9,7 +9,8 @@ import Points from "./Points";
 import YGridLines from "./YGridLines";
 import Threshold from "./Threshold";
 import Area from "./Area";
-import ToolTip from "./ToolTip";
+import ToolTip from "./ToolTip/ToolTip";
+import ToolTipOverlay from "./ToolTip/ToolTipOverlay";
 
 interface LineChartProps {
   bounds: Bounds;
@@ -92,7 +93,6 @@ const LineChart = ({ bounds: { height, width } }: LineChartProps) => {
 
   const toolTipProps = {
     primaryMetric: "health_score" as "health_score",
-    bounds: { height, width },
     xScale,
     colors,
     metrics: {
@@ -119,7 +119,9 @@ const LineChart = ({ bounds: { height, width } }: LineChartProps) => {
       <Points {...pointsProps} />
       <XAxis {...xAxisProps} />
       <YAxis {...yAxisProps} />
-      <ToolTip {...toolTipProps} />
+      <ToolTipOverlay bounds={{ height, width }}>
+        {props => <ToolTip {...{ ...props, ...toolTipProps }} />}
+      </ToolTipOverlay>
     </g>
   );
 };
