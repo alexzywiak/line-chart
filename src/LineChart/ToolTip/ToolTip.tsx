@@ -30,6 +30,10 @@ const ToolTip = <M extends { [key: string]: Metric }>({
   const toolTipRef = useRef<SVGForeignObjectElement>(null);
 
   useEffect(() => {
+    if (!show) {
+      return setXValue(null);
+    }
+
     const [eventX] = coords;
     const metric = metrics[primaryMetric].data;
     const x0 = (xScale as any).invert(eventX) || 0;
@@ -39,21 +43,7 @@ const ToolTip = <M extends { [key: string]: Metric }>({
     const closestTimestamp = x0 - m0 > m1 - x0 ? m1 : m0;
 
     setXValue(closestTimestamp);
-
-    if (toolTipRef.current) {
-      const toolTip = d3.select(toolTipRef.current);
-      toolTip.attr(
-        "transform",
-        translateStr(xScale(closestTimestamp) || 0, 150)
-      );
-    }
-  }, [coords, metrics, primaryMetric, xScale]);
-
-  useEffect(() => {
-    if (!show) {
-      setXValue(null);
-    }
-  }, [show, setXValue]);
+  }, [show, coords, metrics, primaryMetric, xScale]);
 
   if (!show || xValue === null) {
     return null;
@@ -70,7 +60,12 @@ const ToolTip = <M extends { [key: string]: Metric }>({
         strokeWidth="2"
         opacity="0.7"
       ></line>
-      <foreignObject ref={toolTipRef} height={100} width={100}>
+      <foreignObject
+        ref={toolTipRef}
+        height={100}
+        width={100}
+        transform={translateStr(xScale(xValue) || 0, 150)}
+      >
         <div style={{ border: "1px solid green", color: "#dde3ed" }}>
           cheese
         </div>
