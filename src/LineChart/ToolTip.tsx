@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import { Bounds } from "./ResizeSVG";
-import { AxisScale, active } from "d3";
+import { AxisScale } from "d3";
 
 type DotProps = {
   metric: Metric;
@@ -9,7 +9,8 @@ type DotProps = {
   xScale: AxisScale<number>;
 };
 
-const translateStr = (x: number, y: number) => `translate(${x},${y})`;
+const translateStr = (x: number | string, y: number | string) =>
+  `translate(${x},${y})`;
 
 const Dot = ({
   metric: { color, data, yScale },
@@ -31,7 +32,7 @@ const Dot = ({
         d3.select(dotRef.current).attr("transform", translate);
       }
     }
-  }, [activeTimeStamp]);
+  }, [activeTimeStamp, xScale, yScale, data]);
 
   return (
     <circle
@@ -89,7 +90,7 @@ const ToolTip = <M extends { [key: string]: Metric }>({
           const closestTimestamp = x0 - m0 > m1 - x0 ? m1 : m0;
           toolTip.attr(
             "transform",
-            `translate(${xScale(closestTimestamp)},150)`
+            translateStr(xScale(closestTimestamp) || 0, 150)
           );
           setXValue(closestTimestamp);
         });

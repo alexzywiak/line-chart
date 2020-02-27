@@ -90,11 +90,6 @@ const LineChart = ({ bounds: { height, width } }: LineChartProps) => {
     yScale: percentageYScale
   };
 
-  const bandProps = {
-    bands: data.bands,
-    xScale,
-    height
-  };
   const toolTipProps = {
     primaryMetric: "health_score" as "health_score",
     bounds: { height, width },
@@ -116,7 +111,6 @@ const LineChart = ({ bounds: { height, width } }: LineChartProps) => {
   return (
     <g>
       <YGridLines {...gridProps} />
-      {/* <Bands {...bandProps} /> */}
       <Line {...healthLineProps} />
       <Area {...healthLineProps} />
       <Line {...latencyLineProps} />
