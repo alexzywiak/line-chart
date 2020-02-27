@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import { AxisScale } from "d3";
-import { Metric } from "./types";
+import { ChartMetric } from "../metrics";
 import { translateStr } from "./helpers";
 import Dot from "./Dot";
 
-interface ToolTipProps<M extends { [key: string]: Metric }> {
+interface ToolTipProps<M extends { [key: string]: ChartMetric }> {
   primaryMetric: keyof M;
   xScale: AxisScale<number>;
   colors: string[];
@@ -18,7 +18,7 @@ const bisectTime = d3.bisector((d: { timestamp: string }) => {
   return Number(d.timestamp);
 }).left;
 
-const ToolTip = <M extends { [key: string]: Metric }>({
+const ToolTip = <M extends { [key: string]: ChartMetric }>({
   show,
   coords,
   metrics,

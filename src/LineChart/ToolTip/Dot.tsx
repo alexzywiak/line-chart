@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import { AxisScale, select } from "d3";
-import { Metric } from "./types";
+import { ChartMetric } from "../metrics";
 import { translateStr } from "./helpers";
 
 type DotProps = {
-  metric: Metric;
+  metric: ChartMetric;
   activeTimeStamp: number;
   xScale: AxisScale<number>;
 };
